@@ -1,0 +1,1 @@
+read_file -format verilog network_syn_synth.v

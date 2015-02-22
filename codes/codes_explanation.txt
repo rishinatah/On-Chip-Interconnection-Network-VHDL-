@@ -1,0 +1,16 @@
+The differences between the testbench version and synthesizable version: 
+
+1. in the synthesizable version the back pressure signal of a router is responsive at the same clock if the local input buffer of that router is full. In the testbench version the back pressure signal is calculated to be one cycle beforehand. This is because of our testbench design. We need to make the signal one clock beforehand to make sure in the next cycle the testbench knows that and respond to it appropriately.
+2. In the synthesizable version the top level module is the file network_syn.sv with its input and output specified in the report interface part. In the testbench version the top level module is the file top.sv including interface and testbench. 
+3. The most of the codes comments are written in the testbench version.
+
+Run the codes:
+To run the synthesizable version, type “make_dc”; to run the testbench version, type “make test”;
+
+Input requirements:
+Our module can successfully handle the header flits and body flits, but the requirement is that one header flit is strictly followed by four body flits. The body flits should be given to the module subsequently after the header flit is given. If the local input buffer is full, the body flits can be delayed, but need to be given just after the local input buffer is no longer full. 
+
+The module has the back pressure mechanism. When a router's local input buffer is full, it will send out a signal at the same clock to inform this. Then in the next clock cycle as default no valid input will be accepted. 
+
+The reset signal:
+The input buffer will temporarily store the data flits and thus the reset signal should not be given during the data tranferring, otherwise data flits will be lost. The reset signal in the testbench is only given at the beginning of the testbench stimulus.
